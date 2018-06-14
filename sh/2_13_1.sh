@@ -1,3 +1,5 @@
+#!/bin/bash
+
 pwd
 echo ""old=`pwd`""
 old=`pwd`
