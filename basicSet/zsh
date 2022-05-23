@@ -101,11 +101,37 @@ prompt_context() {}
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # open windows file
-alias wopen="cmd.exe /C start"
+alias wopen='cmd.exe /C start'
 
-# run c#
+# update & upgrade
+alias powerup='sudo apt update && sudo apt upgrade -y'
+
+# easy gcc
+function gcco {
+    target=$1
+    if [ $# -eq 4 ]
+    then
+	 gcc -o ${target%.c} $target && ./${target%.c} $2 $3 $4 && rm ${target%.c}
+    elif [ $# -eq 3 ]
+    then
+	gcc -o ${target%.c} $target && ./${target%.c} $2 $3 && rm ${target%.c}
+    elif [ $# -eq 2 ]
+    then
+        gcc -o ${target%.c} $target && ./${target%.c} $2 && rm ${target%.c}
+    else
+        gcc -o ${target%.c} $target && ./${target%.c} && rm ${target%.c}
+    fi
+}
+
+# run cs
 function mo {
-  mcs -out:$1 $2 && mono $1 && rm $1
+  target=$1
+  if [ $2 ]
+  then
+    mcs -out:${target%.cs} $1 && mono ${target%.cs} $2 && rm ${target%.cs}
+  else
+    mcs -out:${target%.cs} $1 && mono ${target%.cs} && rm ${target%.cs}
+  fi
 }
 
 export NVM_DIR="$HOME/.nvm"
@@ -113,4 +139,5 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # xming
-export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
+export DISPLAY=$(ip route list default | awk '{print $3}'):0
+# export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
